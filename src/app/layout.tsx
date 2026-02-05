@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           {/* 2. 모바일 오버레이 배경 (터치 시 닫기) */}
           {isSidebarOpen && (
-            <div className="fixed inset-0 bg-black/40 z-[80] lg:hidden" onClick={() => setIsSidebarOpen(false)} />
+            <div className="fixed inset-0 bg-black/40 z-80 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
           )}
 
           {/* 3. 사이드바 (데스크탑: 공간 차지 / 모바일: 오버레이) */}
