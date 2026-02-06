@@ -8,6 +8,7 @@ interface InputSectionProps {
   style: string;
   setStyle: (val: string) => void;
   onGenerate: () => void;
+  disabled: boolean;
 }
 
 export default function InputSection({
@@ -18,9 +19,10 @@ export default function InputSection({
   style,
   setStyle,
   onGenerate,
+  disabled,
 }: InputSectionProps) {
   return (
-    <section className="w-full lg:w-1/2 p-6 lg:p-10 flex flex-col gap-8 bg-white lg:overflow-y-auto custom-scrollbar border-r border-slate-100">
+    <section className="w-full lg:w-[40%] p-6 lg:p-10 flex flex-col gap-8 bg-white lg:overflow-y-auto custom-scrollbar border-r border-slate-100">
       <div>
         <h3 className="text-lg font-bold tracking-tight">
           Ready<span className="text-orange-500">,</span>
@@ -94,9 +96,12 @@ export default function InputSection({
 
         <button
           onClick={onGenerate}
-          className="w-full bg-black text-white py-4.5 mb-8 lg:mb-0 rounded-full font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-xl cursor-pointer text-sm tracking-tight font-sans"
+          disabled={disabled}
+          className={`w-full text-white py-4.5 mb-8 lg:mb-0 rounded-full font-bold transition-all active:scale-[0.98] shadow-xl text-sm tracking-tight font-sans ${
+            disabled ? "bg-slate-400 cursor-not-allowed" : "bg-black hover:bg-slate-800 cursor-pointer"
+          }`}
         >
-          AI 포스팅 생성하기
+          {disabled ? "생성 중..." : "AI 포스팅 생성하기"}
         </button>
       </div>
     </section>

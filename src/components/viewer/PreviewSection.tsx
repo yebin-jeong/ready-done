@@ -1,53 +1,69 @@
 "use client";
 
-interface EditorSectionProps {
+import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
+const PostViewer = dynamic(() => import("./PostViewer"), { ssr: false });
+
+interface PreviewSectionProps {
   content: string;
   setContent: (val: string) => void;
+  isLoading: boolean;
 }
 
-export default function EditorSection({ content, setContent }: EditorSectionProps) {
+export default function PreviewSection({ content, setContent, isLoading }: PreviewSectionProps) {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
-    <section className="flex-1 lg:w-1/2 flex flex-col min-h-125 lg:h-full lg:overflow-hidden bg-slate-50/50">
+    <section className="flex-1 lg:w-[60%] flex flex-col min-h-125 lg:h-full lg:overflow-hidden bg-slate-50/50">
       <div className="p-6 lg:p-8 lg:pb-4 flex justify-between items-center bg-transparent">
         <div className="hidden sm:block">
           <h3 className="text-lg font-bold tracking-tight">
             Done<span className="text-blue-600">.</span>
           </h3>
-          <p className="text-xs text-slate-500 font-medium">완성된 결과를 확인해보세요.</p>
+          {content && !isLoading && (
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="text-xs font-bold mt-1 text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+            >
+              {isEditing ? "수정 완료" : "내용 수정하기"}
+            </button>
+          )}
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all cursor-pointer shadow-sm">
+          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all shadow-sm">
             복사
           </button>
-          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-blue-600 border border-blue-600 rounded-xl text-xs font-bold text-white hover:bg-blue-700 transition-all cursor-pointer shadow-sm">
+          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-blue-600 border border-blue-600 rounded-xl text-xs font-bold text-white hover:bg-blue-700 transition-all shadow-sm">
             저장하기
           </button>
         </div>
       </div>
 
-      <div className="flex-1 p-5 lg:p-8 lg:pt-0 lg:overflow-y-auto custom-scrollbar">
-        <div className="bg-white border border-slate-100 rounded-[40px] shadow-sm p-8 lg:p-16 min-h-full">
-          {content ? (
-            /* F004: 내용이 있을 때 (에디터/뷰어) */
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full h-full min-h-125 outline-none resize-none prose prose-slate max-w-none text-slate-800"
-              placeholder="여기에 글을 작성하거나 수정하세요..."
-            />
-          ) : (
-            /* 초기 상태 */
-            <article className="prose prose-slate max-w-none mx-auto h-full flex flex-col items-center justify-center">
-              <div className="flex flex-col items-center justify-center py-32 text-center">
-                <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-500 text-2xl animate-pulse">
-                  ✨
-                </div>
-                <p className="text-slate-400 text-sm font-medium italic">
-                  Ready, Done. <br />
-                  당신의 기술 블로그가 여기서 완성됩니다.
-                </p>
+      <div className="flex-1 p-5 lg:p-8 lg:pt-0 lg:overflow-hidden">
+        <div className="bg-white border border-slate-100 rounded-[40px] shadow-sm overflow-hidden h-full">
+          {isLoading ? (
+            /* 로딩 중일 때 화면 */
+            <div className="h-full flex flex-col items-center justify-center text-center p-10">
+              <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-slate-500 text-sm font-bold">AI가 포스팅을 생성하고 있습니다...</p>
+            </div>
+          ) : !content ? (
+            <div className="h-full flex flex-col items-center justify-center text-center p-10">
+              <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-500 text-2xl animate-pulse">
+                ✨
               </div>
-            </article>
+              <p className="text-slate-400 text-sm font-medium italic">
+                Ready, Done. <br /> 당신의 기술 블로그가 여기서 완성됩니다.
+              </p>
+            </div>
+          ) : isEditing ? (
+            <PostEditor content={content} onChange={setContent} />
+          ) : (
+            <div className="h-full overflow-y-auto p-8 lg:p-12 custom-scrollbar">
+              <PostViewer content={content} />
+            </div>
           )}
         </div>
       </div>
