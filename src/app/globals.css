@@ -1,37 +1,33 @@
 @import "tailwindcss";
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* 1. 전체 요소에서 깜빡이는 커서(caret) 기본 제거 */
-* {
-  caret-color: transparent;
-}
-
-/* 2. 클릭 요소: 텍스트 선택 방지 및 하이라이트 제거 */
+/* 1. 기본 스타일: 클릭 요소들은 선택 안 되게 & 커서 숨김 */
 button,
 a,
 .cursor-pointer,
 .select-none {
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  outline: none;
+  caret-color: transparent;
 }
 
-/* 3. 입력창: 커서와 텍스트 선택 기능 복구  */
+/* 2. 일반 텍스트는 드래그는 되지만 커서 깜빡임은 방지 */
+body {
+  caret-color: transparent;
+}
+
+/* 3. 에디터 및 입력창 커서 복구  */
+/* 에디터 엔진인 ProseMirror와 뷰어 영역을 구체적으로 지정 */
+.toastui-editor-container .ProseMirror,
+.toastui-editor-container .toastui-editor-contents,
+.toastui-editor-container textarea,
+.toastui-editor-container input,
 input,
-textarea,
-[contenteditable="true"] {
+textarea {
   user-select: text;
   caret-color: auto;
 }
 
-/* 4. 스크롤바 커스텀 */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #e2e8f0; /* slate-200 */
-  border-radius: 10px;
+/* 4. 위지윅 모드 대응 */
+.toastui-editor-ww-container .ProseMirror div {
+  caret-color: auto;
 }
