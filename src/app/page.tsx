@@ -12,7 +12,7 @@ export default function HomePage() {
       {/* 실제 콘텐츠가 담기는 컨테이너*/}
       <div className="flex flex-col lg:flex-row w-full max-w-360 bg-white shadow-sm overflow-hidden">
         {/* 1. 왼쪽: 입력 섹션 */}
-        <section className="w-full lg:w-[45%] p-6 lg:p-10 flex flex-col gap-8 bg-white lg:overflow-y-auto custom-scrollbar">
+        <section className="w-full lg:w-1/2 p-6 lg:p-10 flex flex-col gap-8 bg-white lg:overflow-y-auto custom-scrollbar">
           <div>
             <h3 className="text-lg font-bold tracking-tight">
               Ready<span className="text-orange-500">,</span>
@@ -94,7 +94,7 @@ export default function HomePage() {
         </section>
 
         {/* 2. 오른쪽: 결과 미리보기 섹션 */}
-        <section className="flex-1 lg:w-[55%] bg-slate-50 flex flex-col min-h-125 lg:h-full lg:overflow-hidden">
+        <section className="flex-1 lg:w-1/2 flex flex-col min-h-125 lg:h-full lg:overflow-hidden">
           {/* 상단 액션 바 */}
           <div className="p-6 lg:p-8 lg:pb-4 flex justify-between items-center bg-transparent">
             <div className="hidden sm:block">

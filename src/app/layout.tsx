@@ -79,8 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </aside>
 
             {/* --- 5. 메인 콘텐츠 --- */}
-            <main className="flex-1 h-full overflow-y-auto bg-white">
-              <div className="max-w-4xl mx-auto p-6 lg:p-12">{children}</div>
+            <main className="flex-1 h-full overflow-y-auto bg-slate-100 flex justify-center">
+              <div className="w-full max-w-7xl px-6 lg:px-12 pb-12 pt-0">{children}</div>
             </main>
           </div>
         </div>
