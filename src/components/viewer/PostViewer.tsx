@@ -7,5 +7,9 @@ import Prism from "prismjs";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 export default function PostViewer({ content }: { content: string }) {
-  return <Viewer initialValue={content} plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]} />;
+  return (
+    <div className="dark:text-slate-100">
+      <Viewer initialValue={content} plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]} />
+    </div>
+  );
 }

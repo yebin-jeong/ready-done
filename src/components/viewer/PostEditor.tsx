@@ -7,6 +7,11 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-tsx";
+import "prismjs/components/prism-markdown";
 
 // 1. Props 타입 정의
 interface PostEditorProps {
@@ -36,7 +41,7 @@ export default function PostEditor({ content, onChange }: PostEditorProps) {
   };
 
   return (
-    <div className="h-full toast-ui-editor-container relative">
+    <div className="h-full toast-ui-editor-container relative dark:bg-slate-950">
       <Editor
         ref={editorRef}
         initialValue={content || " "}

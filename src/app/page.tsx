@@ -10,12 +10,16 @@ export default function HomePage() {
   const [style, setStyle] = useState("tutorial");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // 1. 에러 상태 추가
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!topic) return alert("주제를 입력해주세요!");
+    if (!topic.trim()) return alert("주제를 입력해주세요!");
+    if (!keywords.trim()) return alert("핵심 키워드를 입력해주세요!");
 
     setIsLoading(true);
     setResult("");
+    setError(null); // 2. 새로 생성 시작 시 이전 에러 초기화
 
     try {
       const response = await fetch("/api/generate", {
@@ -26,35 +30,33 @@ export default function HomePage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "알 수 없는 에러가 발생했습니다.");
+        // 3. API 에러 던지기
+        if (response.status === 429) {
+          throw new Error("현재 사용량이 너무 많거나 잔액이 부족합니다. 잠시 후 다시 시도해주세요.");
+        } else if (response.status === 504) {
+          throw new Error("서버 응답 시간이 초과되었습니다. 네트워크를 확인해주세요.");
+        } else if (response.status === 400) {
+          throw new Error("입력 값이 올바르지 않습니다. 주제와 키워드를 확인해주세요.");
+        } else {
+          throw new Error(errorData.error || "서버에 문제가 생겼습니다.");
+        }
       }
 
-      // JSON 구조로 데이터 수신
       const data = await response.json();
 
-      /* 기획서 JSON 구조 반영: 
-        data.title, data.content, data.hashtags, data.metaDescription 
-      */
       if (data.content) {
-        // 뷰어에 예쁘게 보여주기 위해 제목, 본문, 해시태그를 마크다운으로 재조
         const formattedHashtags = data.hashtags
           ? data.hashtags.map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
           : "";
 
         const finalMarkdown = `# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
-
         setResult(finalMarkdown);
-
-        // F007: SEO 메타 데이터 확인용
-        console.log("SEO Meta Description:", data.metaDescription);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Generate Error:", error.message);
-        alert(error.message);
-      } else {
-        alert("알 수 없는 오류가 발생했습니다.");
-      }
+      // 4. 에러 발생 시 상태 업데이트 (alert 대신 섹션에 표시)
+      const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+      setError(message);
+      console.error("Generate Error:", message);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +76,15 @@ export default function HomePage() {
           disabled={isLoading}
         />
 
-        <EditorSection key={result || "empty"} content={result} setContent={setResult} isLoading={isLoading} />
+        {/* 5. EditorSection에 error와 onRetry 전달 */}
+        <EditorSection
+          key={result || error || "empty"}
+          content={result}
+          setContent={setResult}
+          isLoading={isLoading}
+          error={error}
+          onRetry={handleGenerate}
+        />
       </div>
     </div>
   );
