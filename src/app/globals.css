@@ -22,13 +22,7 @@ body {
   color: var(--foreground);
   transition-property: color, background-color;
   transition-duration: 300ms;
-}
-
-/* 2. 클릭 요소 인터랙션 설정 */
-button,
-a,
-.cursor-pointer,
-.select-none {
+  /* 2. 클릭 요소 인터랙션 설정 */
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   caret-color: transparent;
@@ -38,7 +32,8 @@ a,
 input,
 textarea,
 [contenteditable="true"],
-.ProseMirror {
+.ProseMirror,
+.ProseMirror * {
   user-select: text;
   caret-color: auto;
 }
