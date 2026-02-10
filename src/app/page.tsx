@@ -3,6 +3,7 @@
 import { useState } from "react";
 import InputSection from "@/components/InputSection";
 import EditorSection from "@/components/viewer/PreviewSection";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   const [topic, setTopic] = useState("");
@@ -14,8 +15,8 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!topic.trim()) return alert("주제를 입력해주세요!");
-    if (!keywords.trim()) return alert("핵심 키워드를 입력해주세요!");
+    if (!topic.trim()) return toast.error("주제를 입력해주세요!", { id: "topic-warn" });
+    if (!keywords.trim()) return toast.error("핵심 키워드를 입력해주세요!", { id: "key-warn" });
 
     setIsLoading(true);
     setResult("");
@@ -49,14 +50,15 @@ export default function HomePage() {
           ? data.hashtags.map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
           : "";
 
-        const finalMarkdown = `# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
+        const finalMarkdown = `> 💡 **SEO 요약**: ${data.metaDescription}\n\n# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
         setResult(finalMarkdown);
+        toast.success("포스팅이 성공적으로 생성되었습니다!");
       }
     } catch (error: unknown) {
       // 4. 에러 발생 시 상태 업데이트 (alert 대신 섹션에 표시)
       const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
       setError(message);
-      console.error("Generate Error:", message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +80,6 @@ export default function HomePage() {
 
         {/* 5. EditorSection에 error와 onRetry 전달 */}
         <EditorSection
-          key={result || error || "empty"}
           content={result}
           setContent={setResult}
           isLoading={isLoading}
