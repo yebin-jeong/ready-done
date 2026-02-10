@@ -43,13 +43,14 @@ export default function HomePage() {
       }
 
       const data = await response.json();
+      console.log("AI 응답 데이터 전체 구조:", data);
 
       if (data.content) {
         const formattedHashtags = data.hashtags
           ? data.hashtags.map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
           : "";
 
-        const finalMarkdown = `# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
+        const finalMarkdown = `> 💡 **SEO 요약**: ${data.metaDescription}\n\n# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
         setResult(finalMarkdown);
       }
     } catch (error: unknown) {
