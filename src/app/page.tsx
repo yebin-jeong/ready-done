@@ -43,7 +43,6 @@ export default function HomePage() {
       }
 
       const data = await response.json();
-      console.log("AI 응답 데이터 전체 구조:", data);
 
       if (data.content) {
         const formattedHashtags = data.hashtags
