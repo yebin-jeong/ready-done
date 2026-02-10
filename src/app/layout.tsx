@@ -8,6 +8,7 @@ import SidebarItem from "@/components/common/SidebarItem";
 import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import ThemeToggle from "@/components/common/ThemeToggle";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -17,6 +18,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" suppressHydrationWarning>
       <body className="lg:overflow-hidden font-sans text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-950 transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              className: "dark:bg-slate-800 dark:text-white",
+              duration: 3000,
+            }}
+          />
           {/* 1. 최상위 고정 햄버거 버튼 */}
           <MenuButton onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
 
