@@ -26,8 +26,10 @@ export default function PostEditor({ content, onChange }: PostEditorProps) {
   useEffect(() => {
     if (editorRef.current) {
       const instance = editorRef.current.getInstance();
-      if (instance.getMarkdown() !== content) {
-        instance.setMarkdown(content || " ");
+      const currentMarkdown = instance.getMarkdown();
+
+      if (content && currentMarkdown.trim() !== content.trim()) {
+        instance.setMarkdown(content, false);
       }
     }
   }, [content]);

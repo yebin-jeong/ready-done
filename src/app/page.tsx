@@ -80,7 +80,6 @@ export default function HomePage() {
 
         {/* 5. EditorSection에 error와 onRetry 전달 */}
         <EditorSection
-          key={result || error || "empty"}
           content={result}
           setContent={setResult}
           isLoading={isLoading}
