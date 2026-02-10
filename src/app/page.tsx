@@ -52,7 +52,7 @@ export default function HomePage() {
 
         const finalMarkdown = `> 💡 **SEO 요약**: ${data.metaDescription}\n\n# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
         setResult(finalMarkdown);
-        toast.success("포스팅이 성공적으로 생성되었습니다! ✨");
+        toast.success("포스팅이 성공적으로 생성되었습니다!");
       }
     } catch (error: unknown) {
       // 4. 에러 발생 시 상태 업데이트 (alert 대신 섹션에 표시)

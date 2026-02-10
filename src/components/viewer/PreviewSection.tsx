@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import ActionButtons from "./ActionButtons";
 
 const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
 const PostViewer = dynamic(() => import("./PostViewer"), { ssr: false });
@@ -33,15 +34,7 @@ export default function PreviewSection({ content, setContent, isLoading, error, 
             </button>
           )}
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          {/* 복사 버튼 */}
-          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-sm">
-            복사
-          </button>
-          <button className="flex-1 sm:flex-none px-6 py-2.5 bg-blue-600 border border-blue-600 rounded-xl text-xs font-bold text-white hover:bg-blue-700 transition-all shadow-sm">
-            저장하기
-          </button>
-        </div>
+        <ActionButtons content={content} isLoading={isLoading} />
       </div>
 
       <div className="flex-1 p-5 lg:p-8 lg:pt-0 lg:overflow-hidden">
