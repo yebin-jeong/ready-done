@@ -1,3 +1,4 @@
+// AI 포스팅 생성 메인 페이지
 "use client";
 
 import { useState } from "react";

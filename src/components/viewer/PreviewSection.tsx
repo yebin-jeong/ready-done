@@ -1,3 +1,4 @@
+// 생성 결과 미리보기 영역
 "use client";
 
 import { useState } from "react";

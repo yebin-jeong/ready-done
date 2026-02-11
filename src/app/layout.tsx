@@ -1,3 +1,4 @@
+// 루트 레이아웃
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
 

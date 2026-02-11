@@ -1,3 +1,4 @@
+// 블로그 스타일별 템플릿 상수
 export const TEMPLATES = {
   tutorial: {
     label: "튜토리얼",

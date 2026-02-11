@@ -1,3 +1,4 @@
+// 로고 컴포넌트
 export default function Logo() {
   return (
     <h1 className="text-xl font-black tracking-tighter ml-2">

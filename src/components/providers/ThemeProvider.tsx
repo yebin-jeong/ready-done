@@ -1,3 +1,4 @@
+// next-themes 프로바이더 래퍼
 "use client";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";

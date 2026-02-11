@@ -1,3 +1,4 @@
+// 사이드바 네비게이션 아이템
 import Link from "next/link";
 
 interface SidebarItemProps {

@@ -1,3 +1,4 @@
+// 클라이언트 레이아웃 쉘 (헤더, 사이드바, 오버레이)
 "use client";
 
 import { useState } from "react";

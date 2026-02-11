@@ -1,3 +1,4 @@
+// OpenAI API 호출 서버 라우트
 import { openai } from "@/lib/openai";
 import { NextResponse } from "next/server";
 import { APIError } from "openai";
