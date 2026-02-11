@@ -1,3 +1,4 @@
+// 블로그 주제, 키워드, 스타일 입력 폼
 "use client";
 
 interface InputSectionProps {

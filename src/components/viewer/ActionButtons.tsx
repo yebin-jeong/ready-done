@@ -1,3 +1,4 @@
+// 복사/저장 버튼 및 마크다운→HTML 변환
 "use client";
 
 import { useState } from "react";
@@ -28,22 +29,30 @@ export default function ActionButtons({ content, isLoading }: ActionButtonsProps
     let extension = ".md";
 
     if (type === "html") {
-      // 1. 코드 블록 선행 처리
-      let processedContent = content.replace(/```([\s\S]*?)```/gm, (_, p1) => {
-        const safeCode = p1.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return `<pre><code>${safeCode}</code></pre>`;
-      });
+      // Markdown -> HTML 변환을 헬퍼로 분리
+      const convertMarkdownToHtml = (md: string) => {
+        // 코드블록 처리
+        let processed = md.replace(/```([\s\S]*?)```/gm, (_, p1) => {
+          const safeCode = p1.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          return `<pre><code>${safeCode}</code></pre>`;
+        });
 
-      // 2. 나머지 요소 변환
-      processedContent = processedContent
-        .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-        .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-        .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-        .replace(/^> (.*$)/gim, "<blockquote>$1</blockquote>")
-        .replace(/`([^`]+)`/g, "<code>$1</code>")
-        .replace(/^\s*[\-\*] (.*$)/gim, "<ul><li>$1</li></ul>")
-        .replace(/<\/ul>\s*<ul>/g, "")
-        .replace(/\n/g, "<br>");
+        // 기본 블록 변환
+        processed = processed
+          .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+          .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+          .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+          .replace(/^> (.*$)/gim, "<blockquote>$1</blockquote>")
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/^\s*[-*] (.*$)/gim, "<li>$1</li>")
+          .replace(/(\n)?<li>(.*?)<\/li>/g, "<ul><li>$2</li></ul>")
+          .replace(/<\/ul>\s*<ul>/g, "")
+          .replace(/\n/g, "<br>");
+
+        return processed;
+      };
+
+      const processedContent = convertMarkdownToHtml(content);
 
       fileContent = `
       <!DOCTYPE html>

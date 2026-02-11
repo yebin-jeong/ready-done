@@ -1,3 +1,4 @@
+// 햄버거 메뉴 버튼
 interface MenuButtonProps {
   onClick: () => void;
 }
