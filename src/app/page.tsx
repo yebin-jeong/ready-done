@@ -5,6 +5,13 @@ import InputSection from "@/components/InputSection";
 import EditorSection from "@/components/viewer/PreviewSection";
 import toast from "react-hot-toast";
 
+// 에러 메시지 추출 헬퍼 함수
+function extractErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return "알 수 없는 오류가 발생했습니다.";
+}
+
 export default function HomePage() {
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -31,23 +38,14 @@ export default function HomePage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        // 3. API 에러 던지기
-        if (response.status === 429) {
-          throw new Error("현재 사용량이 너무 많거나 잔액이 부족합니다. 잠시 후 다시 시도해주세요.");
-        } else if (response.status === 504) {
-          throw new Error("서버 응답 시간이 초과되었습니다. 네트워크를 확인해주세요.");
-        } else if (response.status === 400) {
-          throw new Error("입력 값이 올바르지 않습니다. 주제와 키워드를 확인해주세요.");
-        } else {
-          throw new Error(errorData.error || "서버에 문제가 생겼습니다.");
-        }
+        // 서버가 보낸 구체적인 메시지가 있으면 쓰고, 없으면 기본 메시지
+        throw new Error(errorData.error || "서버 응답 오류가 발생했습니다.");
       }
-
       const data = await response.json();
 
       if (data.content) {
         const formattedHashtags = data.hashtags
-          ? data.hashtags.map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
+          ? (data.hashtags as string[]).map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
           : "";
 
         const finalMarkdown = `> 💡 **SEO 요약**: ${data.metaDescription}\n\n# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
@@ -55,10 +53,9 @@ export default function HomePage() {
         toast.success("포스팅이 성공적으로 생성되었습니다!");
       }
     } catch (error: unknown) {
-      // 4. 에러 발생 시 상태 업데이트 (alert 대신 섹션에 표시)
-      const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      setError(message);
-      toast.error(message);
+      const errorMessage = extractErrorMessage(error);
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
