@@ -8,15 +8,16 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timeout);
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
   }, []);
 
-  if (!mounted) return <div className="w-25 h-8" />;
+  if (!mounted) return <div className="w-24 h-8" />;
 
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="테마 토글"
       className="px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 
                  text-[11px] font-bold tracking-tight
                  text-slate-900 dark:text-slate-100  
