@@ -1,3 +1,4 @@
+// API 응답 및 데이터 타입 정의
 export interface GeneratedPost {
   title: string; // SEO 최적화 제목
   content: string; // 마크다운 형식의 본문
