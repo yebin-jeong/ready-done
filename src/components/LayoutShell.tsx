@@ -66,12 +66,12 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
                   isActive={pathname === "/"}
                   onClick={() => setIsSidebarOpen(false)}
                 />
-                <SidebarItem
+                {/* <SidebarItem
                   href="/posts"
                   label="내 포스트"
                   isActive={pathname === "/posts"}
                   onClick={() => setIsSidebarOpen(false)}
-                />
+                /> */}
               </nav>
 
               <div className="px-2">
