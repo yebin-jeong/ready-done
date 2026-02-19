@@ -22,6 +22,8 @@ interface PostEditorProps {
 
 export default function PostEditor({ content, onChange }: PostEditorProps) {
   const editorRef = useRef<Editor>(null);
+  // content가 string이 아닐 경우 빈 string으로 처리
+  const safeContent = typeof content === "string" ? content : "";
 
   // 2. 외부에서 content가 바뀌면 에디터 내용 동기화
   useEffect(() => {
@@ -29,11 +31,11 @@ export default function PostEditor({ content, onChange }: PostEditorProps) {
       const instance = editorRef.current.getInstance();
       const currentMarkdown = instance.getMarkdown();
 
-      if (content && currentMarkdown.trim() !== content.trim()) {
-        instance.setMarkdown(content, false);
+      if (safeContent && currentMarkdown.trim() !== safeContent.trim()) {
+        instance.setMarkdown(safeContent, false);
       }
     }
-  }, [content]);
+  }, [safeContent]);
 
   // 3. 에디터 내용이 바뀔 때 부모의 setContent 실행
   const handleEditorChange = () => {
@@ -47,7 +49,7 @@ export default function PostEditor({ content, onChange }: PostEditorProps) {
     <div className="h-full toast-ui-editor-container relative dark:bg-slate-950">
       <Editor
         ref={editorRef}
-        initialValue={content || " "}
+        initialValue={safeContent || " "}
         previewStyle="vertical"
         height="100%"
         initialEditType="markdown"
