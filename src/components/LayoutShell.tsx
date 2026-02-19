@@ -1,7 +1,7 @@
 // 클라이언트 레이아웃 쉘 (헤더, 사이드바, 오버레이)
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuButton from "@/components/common/MenuButton";
 import Logo from "@/components/common/Logo";
 import SidebarItem from "@/components/common/SidebarItem";
@@ -9,10 +9,24 @@ import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { Toaster } from "react-hot-toast";
+import { SavedPost } from "@/types";
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [savedPosts, setSavedPosts] = useState<SavedPost[]>([]);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const loadPosts = () => {
+      const posts = JSON.parse(localStorage.getItem("ready-done-posts") || "[]");
+      setSavedPosts(posts);
+    };
+
+    loadPosts();
+    // 데이터 저장 시 발생하는 커스텀 이벤트 감지
+    window.addEventListener("storage-update", loadPosts);
+    return () => window.removeEventListener("storage-update", loadPosts);
+  }, []);
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -64,14 +78,38 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
                   href="/"
                   label="글쓰기"
                   isActive={pathname === "/"}
-                  onClick={() => setIsSidebarOpen(false)}
+                  onClick={(e) => {
+                    e?.preventDefault();
+                    window.dispatchEvent(new CustomEvent("reset-editor"));
+                    setIsSidebarOpen(false);
+                  }}
                 />
-                {/* <SidebarItem
-                  href="/posts"
-                  label="내 포스트"
-                  isActive={pathname === "/posts"}
-                  onClick={() => setIsSidebarOpen(false)}
-                /> */}
+                {/* 최근 생성된 글 목록 표시 */}
+                {savedPosts.length > 0 && (
+                  <div className="mt-8">
+                    <p className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      최근 생성된 글
+                    </p>
+                    <div className="space-y-0.5">
+                      {savedPosts.map((post) => (
+                        <SidebarItem
+                          key={post.id}
+                          href="#"
+                          label={post.title}
+                          isActive={false}
+                          onClick={() => {
+                            window.dispatchEvent(
+                              new CustomEvent("load-post", {
+                                detail: { content: post.content, hashtags: post.hashtags || [] },
+                              }),
+                            );
+                            setIsSidebarOpen(false);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </nav>
 
               <div className="px-2">
