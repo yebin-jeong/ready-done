@@ -1,7 +1,7 @@
 import { openai } from "@/lib/openai";
 import { NextResponse } from "next/server";
-import { APIError } from "openai"; // 'type' 키워드 없이 가져와야 instanceof 사용 가능
-import { TEMPLATES } from "@/constants/templates";
+import { APIError } from "openai";
+import { TEMPLATES, generateSystemPrompt } from "@/constants/templates";
 import { GeneratedPost } from "@/types/index";
 
 export async function POST(req: Request) {
@@ -20,25 +20,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: `당신은 전문 기술 블로그 작가이자 SEO 전문가입니다. 
-          반드시 아래 JSON 형식으로만 응답하세요. 다른 설명은 하지 마세요.
-
-          [작성 분량 규칙]
-          - 본문은 최소 1200자 이상 작성하세요.
-          - 각 섹션은 충분한 설명과 예시를 포함하세요.
-          - 얕은 요약이 아니라 실무에 도움이 되는 깊이 있는 내용을 작성하세요.
-
-          {
-            "title": "SEO에 최적화된 제목",
-            "content": "마크다운 본문",
-            "hashtags": ["태그1", "태그2", "태그3"],
-            "metaDescription": "SEO용 설명 (160자 이내)"
-          }
-
-          [스타일별 본문 구조 가이드]
-          1. tutorial: ${TEMPLATES.tutorial.structure}
-          2. til: ${TEMPLATES.til.structure}
-          3. troubleshooting: ${TEMPLATES.troubleshooting.structure}`,
+          content: generateSystemPrompt(),
         },
         {
           role: "user",
