@@ -1,6 +1,8 @@
 // 블로그 주제, 키워드, 스타일 입력 폼
 "use client";
 
+import { STYLE_OPTIONS } from "@/constants/templates";
+
 interface InputSectionProps {
   topic: string;
   setTopic: (val: string) => void;
@@ -66,11 +68,7 @@ export default function InputSection({
             포스팅 스타일
           </label>
           <div className="grid grid-cols-3 lg:grid-cols-1 gap-2">
-            {[
-              { id: "tutorial", label: "튜토리얼", sub: "Tutorial", desc: "단계별 가이드" },
-              { id: "til", label: "TIL", sub: "TIL", desc: "배운 점 기록" },
-              { id: "troubleshooting", label: "트러블슈팅", sub: "Issue", desc: "문제 해결 과정" },
-            ].map((item) => (
+            {STYLE_OPTIONS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setStyle(item.id)}

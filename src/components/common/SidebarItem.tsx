@@ -4,7 +4,7 @@ import Link from "next/link";
 interface SidebarItemProps {
   href: string;
   label: string;
-  onClick: () => void;
+  onClick: (e?: React.MouseEvent) => void;
   isActive?: boolean;
 }
 

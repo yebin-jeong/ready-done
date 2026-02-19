@@ -1,10 +1,11 @@
 // AI 포스팅 생성 메인 페이지
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputSection from "@/components/InputSection";
 import EditorSection from "@/components/viewer/PreviewSection";
 import toast from "react-hot-toast";
+import { formatGeneratedContent, saveNewPost, updateSavedPosts } from "@/lib/utils";
 
 // 에러 메시지 추출 헬퍼 함수
 function extractErrorMessage(error: unknown): string {
@@ -18,9 +19,43 @@ export default function HomePage() {
   const [keywords, setKeywords] = useState("");
   const [style, setStyle] = useState("tutorial");
   const [result, setResult] = useState("");
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  // 1. 에러 상태 추가
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleLoadPost = (e: Event) => {
+      const customEvent = e as CustomEvent<{ content: string; hashtags: string[] } | string>;
+      if (customEvent.detail) {
+        if (typeof customEvent.detail === "string") {
+          setResult(customEvent.detail);
+          setHashtags([]);
+        } else {
+          setResult(customEvent.detail.content);
+          setHashtags(customEvent.detail.hashtags || []);
+        }
+        setError(null);
+        toast.success("포스트를 불러왔습니다.");
+      }
+    };
+
+    const handleResetEditor = () => {
+      setTopic("");
+      setKeywords("");
+      setStyle("tutorial");
+      setResult("");
+      setHashtags([]);
+      setError(null);
+    };
+
+    window.addEventListener("load-post", handleLoadPost);
+    window.addEventListener("reset-editor", handleResetEditor);
+
+    return () => {
+      window.removeEventListener("load-post", handleLoadPost);
+      window.removeEventListener("reset-editor", handleResetEditor);
+    };
+  }, []);
 
   const handleGenerate = async () => {
     if (!topic.trim()) return toast.error("주제를 입력해주세요!", { id: "topic-warn" });
@@ -28,7 +63,8 @@ export default function HomePage() {
 
     setIsLoading(true);
     setResult("");
-    setError(null); // 2. 새로 생성 시작 시 이전 에러 초기화
+    setHashtags([]);
+    setError(null);
 
     try {
       const response = await fetch("/api/generate", {
@@ -45,12 +81,14 @@ export default function HomePage() {
       const data = await response.json();
 
       if (data.content) {
-        const formattedHashtags = data.hashtags
-          ? (data.hashtags as string[]).map((tag: string) => `#${tag.replace(/\s/g, "")}`).join(" ")
-          : "";
-
-        const finalMarkdown = `> 💡 **SEO 요약**: ${data.metaDescription}\n\n# ${data.title}\n\n${data.content}\n\n---\n${formattedHashtags}`;
+        const finalMarkdown = formatGeneratedContent(data);
         setResult(finalMarkdown);
+        setHashtags(data.hashtags);
+
+        const newPost = saveNewPost(data.title, finalMarkdown, data.hashtags);
+        updateSavedPosts(newPost);
+
+        window.dispatchEvent(new Event("storage-update"));
         toast.success("포스팅이 성공적으로 생성되었습니다!");
       }
     } catch (error: unknown) {
@@ -83,6 +121,7 @@ export default function HomePage() {
           isLoading={isLoading}
           error={error}
           onRetry={handleGenerate}
+          hashtags={hashtags}
         />
       </div>
     </div>
