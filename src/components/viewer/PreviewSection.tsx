@@ -14,9 +14,17 @@ interface PreviewSectionProps {
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
+  hashtags?: string[];
 }
 
-export default function PreviewSection({ content, setContent, isLoading, error, onRetry }: PreviewSectionProps) {
+export default function PreviewSection({
+  content,
+  setContent,
+  isLoading,
+  error,
+  onRetry,
+  hashtags = [],
+}: PreviewSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -39,7 +47,7 @@ export default function PreviewSection({ content, setContent, isLoading, error, 
       </div>
 
       <div className="flex-1 p-5 lg:p-8 lg:pt-0 lg:overflow-hidden">
-        {/* 2. 핵심 콘텐츠 박스 */}
+        {/* 핵심 콘텐츠 박스 */}
         <div className="bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-800 rounded-[40px] shadow-sm overflow-hidden h-full transition-colors">
           {isLoading ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-10">
@@ -72,8 +80,8 @@ export default function PreviewSection({ content, setContent, isLoading, error, 
           ) : isEditing ? (
             <PostEditor content={content} onChange={setContent} />
           ) : (
-            <div className="h-full overflow-y-auto p-8 lg:p-12 custom-scrollbar">
-              <PostViewer content={content} />
+            <div className="h-full overflow-y-auto p-8 lg:p-12 custom-scrollbar flex flex-col">
+              <PostViewer content={content} hashtags={hashtags} />
             </div>
           )}
         </div>

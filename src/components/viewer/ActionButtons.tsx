@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { convertMarkdownToHtml, generateHtmlWrapper } from "@/lib/utils";
 
 interface ActionButtonsProps {
   content: string;
@@ -29,52 +30,8 @@ export default function ActionButtons({ content, isLoading }: ActionButtonsProps
     let extension = ".md";
 
     if (type === "html") {
-      // Markdown -> HTML 변환을 헬퍼로 분리
-      const convertMarkdownToHtml = (md: string) => {
-        // 코드블록 처리
-        let processed = md.replace(/```([\s\S]*?)```/gm, (_, p1) => {
-          const safeCode = p1.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          return `<pre><code>${safeCode}</code></pre>`;
-        });
-
-        // 기본 블록 변환
-        processed = processed
-          .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-          .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-          .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-          .replace(/^> (.*$)/gim, "<blockquote>$1</blockquote>")
-          .replace(/`([^`]+)`/g, "<code>$1</code>")
-          .replace(/^\s*[-*] (.*$)/gim, "<li>$1</li>")
-          .replace(/(\n)?<li>(.*?)<\/li>/g, "<ul><li>$2</li></ul>")
-          .replace(/<\/ul>\s*<ul>/g, "")
-          .replace(/\n/g, "<br>");
-
-        return processed;
-      };
-
-      const processedContent = convertMarkdownToHtml(content);
-
-      fileContent = `
-      <!DOCTYPE html>
-      <html lang="ko">
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: sans-serif; line-height: 1.7; max-width: 800px; margin: 40px auto; padding: 20px; color: #334155; }
-          h1 { font-size: 2.25rem; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; color: #0f172a; }
-          h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; color: #1e293b; }
-          h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; }
-          blockquote { border-left: 4px solid #3b82f6; background: #eff6ff; padding: 1rem; margin: 1.5rem 0; border-radius: 8px; font-style: italic; }
-          pre { background: #1e293b; color: #f8fafc; padding: 1.5rem; border-radius: 12px; overflow-x: auto; font-family: monospace; margin: 1.5rem 0; white-space: pre-wrap; }
-          code { background: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #e11d48; }
-          pre code { background: transparent; padding: 0; color: inherit; }
-          ul { padding-left: 1.5rem; margin: 1rem 0; }
-          li { margin-bottom: 0.5rem; list-style-type: disc; }
-        </style>
-      </head>
-      <body>${processedContent}</body>
-      </html>`.trim();
-
+      const htmlContent = convertMarkdownToHtml(content);
+      fileContent = generateHtmlWrapper(htmlContent);
       mimeType = "text/html";
       extension = ".html";
     }
