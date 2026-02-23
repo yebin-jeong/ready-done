@@ -53,3 +53,40 @@ textarea,
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #334155; /* slate-700 */
 }
+
+/* Toast UI Viewer & Editor 다크모드 */
+.dark .toastui-editor-contents,
+.dark .toastui-editor-contents *,
+.dark .ProseMirror,
+.dark .ProseMirror * {
+  color: var(--foreground);
+}
+
+/* 코드 블록 배경 및 내부 글자색 가독성 확보 */
+.dark .toastui-editor-contents pre,
+.dark .toastui-editor-contents pre *,
+.dark .ProseMirror pre,
+.dark .ProseMirror pre * {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* 코드 내 주요 키워드만 색상 살리기 */
+.dark .token.keyword {
+  color: #60a5fa;
+} /* 파란색 */
+.dark .token.string {
+  color: #34d399;
+} /* 초록색 */
+.dark .token.function {
+  color: #fbbf24;
+} /* 노란색 */
+
+/* 에디터(수정모드) 툴바 및 배경 */
+.dark .toastui-editor-defaultUI {
+  background-color: var(--background);
+  border-color: var(--border);
+}
+.dark .toastui-editor-toolbar {
+  background-color: #1e293b;
+}
