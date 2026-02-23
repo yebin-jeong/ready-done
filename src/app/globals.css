@@ -54,7 +54,7 @@ textarea,
   background: #334155; /* slate-700 */
 }
 
-/* Toast UI Viewer & Editor 다크모드 통합 해결 */
+/* Toast UI Viewer & Editor 다크모드 */
 .dark .toastui-editor-contents,
 .dark .toastui-editor-contents *,
 .dark .ProseMirror,
@@ -62,19 +62,13 @@ textarea,
   color: var(--foreground);
 }
 
-/* 코드 블록(Pre) 배경 및 내부 글자색 가독성 확보 */
+/* 코드 블록 배경 및 내부 글자색 가독성 확보 */
 .dark .toastui-editor-contents pre,
 .dark .toastui-editor-contents pre *,
 .dark .ProseMirror pre,
 .dark .ProseMirror pre * {
   background-color: #0f172a;
   color: #f1f5f9;
-}
-
-.dark .toastui-editor-contents .token,
-.dark .ProseMirror .token {
-  background: none;
-  color: inherit;
 }
 
 /* 코드 내 주요 키워드만 색상 살리기 */

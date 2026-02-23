@@ -11,6 +11,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-css";
+import "prismjs/components/prism-python";
 
 interface PostViewerProps {
   content: string;
@@ -58,13 +59,31 @@ export default function PostViewer({ content, hashtags = [] }: PostViewerProps) 
     }
 
     /* 주요 Prism 토큰 색상 복구 */
-    .dark .token.keyword { color: #7dd3fc; }   /* 키워드: 연파랑 */
-    .dark .token.string { color: #a5f3fc; }    /* 문자열: 하늘색 */
-    .dark .token.function { color: #bae6fd; }  /* 함수: 밝은파랑 */
-    .dark .token.comment { color: #64748b; }   /* 주석: 슬레이트 */
-    .dark .token.operator { color: #94a3b8; }  /* 연산자 */
-    .dark .token.punctuation { color: #e2e8f0; } /* 기호 */
-    
+    /* 라이트 모드 프리즘 색상 */
+    .token.keyword, .token.operator, .token.selector, .token.property { color: #0077aa; }
+    .token.tag, .token.boolean, .token.number { color: #990055; }
+    .token.string, .token.attr-value, .token.char { color: #669900; }
+    .token.function, .token.class-name { color: #dd4a68; }
+    .token.comment { color: #708090; }
+
+    /* 다크 모드일 때만 프리즘 색상을 밝게 오버라이드 */
+    .dark .token.tag, 
+    .dark .token.keyword, 
+    .dark .token.selector,
+    .dark .token.property,
+    .dark .token.operator { color: #7dd3fc; }
+
+    .dark .token.function,
+    .dark .token.class-name { color: #fbbf24; }
+
+    .dark .token.string, 
+    .dark .token.attr-value { color: #34d399; }
+
+    .dark .token.comment { color: #64748b; }
+    .dark .token.punctuation { color: #94a3b8; }
+    .dark .token.boolean,
+    .dark .token.number { color: #f472b6; }
+
     /* 인용문 스타일 */
     .dark .toastui-editor-contents blockquote {
       border-left: 4px solid #334155;
