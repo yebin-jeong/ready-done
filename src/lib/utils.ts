@@ -7,16 +7,10 @@ import { GeneratedPost } from "@/types";
  */
 export function convertMarkdownToHtml(markdown: string): string {
   let html = markdown;
-  html = html.replace(/```(\w+)?([\s\S]*?)```/gm, (_, lang, code) => {
+  html = html.replace(/```(?:(\w+)\n)?([\s\S]*?)```/gm, (_, lang, code) => {
     const safecode = code.replace(/</g, "&lt;").replace(/>/g, "&gt;").trim();
     const languageClass = lang ? `class="language-${lang}"` : "";
     return `<pre><code ${languageClass}>${safecode}</code></pre>`;
-  });
-
-  // 코드블록 (```...```)
-  html = html.replace(/```([\s\S]*?)```/gm, (_, code) => {
-    const safecode = code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return `<pre><code>${safecode}</code></pre>`;
   });
 
   // 제목 (# ## ###)
@@ -99,8 +93,17 @@ export function saveNewPost(title: string, content: string, hashtags: string[] =
 /**
  * 저장된 포스트 목록 업데이트 (최대 10개 유지)
  */
-export function updateSavedPosts(newPost: SavedPost): void {
+export function updateSavedPosts(post: SavedPost): void {
+  // 1. 기존 목록 가져오기
   const existingPosts: SavedPost[] = JSON.parse(localStorage.getItem("ready-done-posts") || "[]");
-  const updatedPosts = [newPost, ...existingPosts].slice(0, 10);
+
+  // 2. 기존 목록에서 동일한 ID를 가진 포스트 제거 (수정 시 중복 방지)
+  const filteredPosts = existingPosts.filter((p) => p.id !== post.id);
+
+  // 3. 현재 포스트를 맨 앞에 추가하고 최대 10개까지만 유지
+  const updatedPosts = [post, ...filteredPosts].slice(0, 10);
+
+  // 4. 로컬 스토리지 저장 및 동기화 이벤트 발생
   localStorage.setItem("ready-done-posts", JSON.stringify(updatedPosts));
+  window.dispatchEvent(new Event("storage-update"));
 }

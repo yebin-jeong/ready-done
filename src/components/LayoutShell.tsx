@@ -98,9 +98,17 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
                           label={post.title}
                           isActive={false}
                           onClick={() => {
+                            // 1. 새로운 글을 불러오기 전, 기존의 임시 저장 데이터를 삭제
+                            localStorage.removeItem("ready-done-temp-content");
+
+                            // 2. 글 불러오기 이벤트를 발생
                             window.dispatchEvent(
                               new CustomEvent("load-post", {
-                                detail: { content: post.content, hashtags: post.hashtags || [] },
+                                detail: {
+                                  id: post.id,
+                                  content: post.content,
+                                  hashtags: post.hashtags || [],
+                                },
                               }),
                             );
                             setIsSidebarOpen(false);
