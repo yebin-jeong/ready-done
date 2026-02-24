@@ -20,6 +20,7 @@ interface PostViewerProps {
 
 export default function PostViewer({ content, hashtags = [] }: PostViewerProps) {
   const viewerRef = useRef<Viewer>(null);
+  const isFirstMount = useRef(true);
   const safeContent = typeof content === "string" ? content : "";
 
   // 다크모드 대응 커스텀 스타일
@@ -93,6 +94,11 @@ export default function PostViewer({ content, hashtags = [] }: PostViewerProps) 
   `;
 
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+
     if (viewerRef.current) {
       const instance = viewerRef.current.getInstance();
       instance.setMarkdown(safeContent);

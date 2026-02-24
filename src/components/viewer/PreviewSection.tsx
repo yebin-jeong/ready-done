@@ -1,9 +1,11 @@
 // 생성 결과 미리보기 영역
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ActionButtons from "./ActionButtons";
+import { updateSavedPosts } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
 const PostViewer = dynamic(() => import("./PostViewer"), { ssr: false });
@@ -15,6 +17,7 @@ interface PreviewSectionProps {
   error: string | null;
   onRetry: () => void;
   hashtags?: string[];
+  currentPostId: number | null;
 }
 
 export default function PreviewSection({
@@ -24,8 +27,54 @@ export default function PreviewSection({
   error,
   onRetry,
   hashtags = [],
+  currentPostId,
 }: PreviewSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
+
+  // 1. 실시간 백업
+  useEffect(() => {
+    if (content && !isLoading) {
+      localStorage.setItem("ready-done-temp-content", content);
+      if (currentPostId) {
+        localStorage.setItem("ready-done-temp-id", currentPostId.toString());
+      }
+    }
+  }, [content, isLoading, currentPostId]);
+
+  // 2. 수정 중 실수로 새로고침하는 것을 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isEditing) {
+        e.preventDefault();
+        return "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isEditing]);
+
+  // 3. 수정 완료 및 목록 업데이트 핸들러
+  const handleFinishEditing = () => {
+    if (isEditing) {
+      // 제목 추출 (마크다운 첫 줄의 # 제목 형태를 파싱)
+      const titleMatch = content.match(/^#\s+(.*)$/m);
+      const title = titleMatch ? titleMatch[1] : "수정된 포스트";
+
+      const updatedPost = {
+        id: currentPostId || Date.now(), // 부모에게 받은 원본 ID 유지 (없으면 생성)
+        title: title,
+        content: content,
+        hashtags: hashtags,
+        createdAt: new Date().toISOString(),
+      };
+
+      updateSavedPosts(updatedPost);
+      localStorage.removeItem("ready-done-temp-content");
+      localStorage.removeItem("ready-done-temp-id");
+      toast.success("수정 내용이 목록에 반영되었습니다.");
+    }
+    setIsEditing(!isEditing);
+  };
 
   return (
     <section className="flex-1 lg:w-[60%] flex flex-col min-h-125 lg:h-full lg:overflow-hidden bg-slate-50/50 dark:bg-slate-950 transition-colors">
@@ -36,7 +85,7 @@ export default function PreviewSection({
           </h3>
           {content && !isLoading && (
             <button
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={handleFinishEditing}
               className="text-xs font-bold mt-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
             >
               {isEditing ? "수정 완료" : "내용 수정하기"}
