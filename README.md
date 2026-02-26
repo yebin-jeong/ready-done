@@ -5,7 +5,7 @@
 
 <br/>
 
-### 🎯 Project Purpose
+## 🎯 Project Purpose
 
 * **첫 문장의 막막함 해소**: AI를 통해 제목, 본문, 해시태그가 포함된 마크다운 초안을 즉시 생성하여 포스팅 효율을 극대화합니다.
 * **학습 기록의 습관화**: TIL(Today I Learned)이나 에러 로그를 남기고 싶지만 글재주가 고민인 학습자들을 위해 구조화된 템플릿을 제공합니다.
@@ -13,7 +13,7 @@
 
 <br/>
    
-### 📁 프로젝트 구조 (Project Structure)
+## 📁 프로젝트 구조 (Project Structure)
 
 `src` 디렉토리를 중심으로 한 프로젝트의 주요 구조입니다.
 
@@ -40,7 +40,7 @@ ready-done
 
 <br/>
 
-### 🔑 핵심 기능 (Key Features)
+## 🔑 핵심 기능 (Key Features)
 
 * **자동화된 콘텐츠 생성**: OpenAI API 기반의 마크다운 초안 및 SEO 메타 데이터 생성
 * **지속적인 기록 관리**: 로컬 스토리지를 활용한 별도 로그인 없는 생성 내역 관리
@@ -50,7 +50,7 @@ ready-done
   
 <br/>
 
-### 🛠 기술 스택 (Tech Stack)
+## 🛠 기술 스택 (Tech Stack)
 
 | Category | stack |
 | :--- | :--- |
@@ -62,7 +62,7 @@ ready-done
 
 <br/>
 
-### 🌊 사용자 흐름 (UX Flow)
+## 🌊 사용자 흐름 (UX Flow)
 
 1. **입력**: 주제와 키워드를 입력하고 원하는 스타일 선택 후 생성 클릭
 2. **생성**: 비동기 상태 관리를 통한 로딩 애니메이션과 함께 AI 글 생성
@@ -72,7 +72,7 @@ ready-done
 
 <br/>
 
-### 🚀 시작하기 (Getting Started)
+## 🚀 시작하기 (Getting Started)
 
 **1. 환경 변수 설정**
 `.env.local` 파일을 루트 폴더에 생성하고 필요한 API 키를 설정하세요.
@@ -93,11 +93,10 @@ npm run dev
 
 <br/>
 
-### 🔗 Deployment
+## 🔗 Links
 
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://ready-done-kappa.vercel.app/)
+| 🚀 Deploy | 🎥 Demo Video | 📄 Presentation |
+| :--- | :--- | :--- |
+| [![Deploy](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://ready-done-kappa.vercel.app/) | [![Demo Video](https://img.shields.io/badge/Video-Demo_보러가기-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/cKIgKIPlY4M) | [![Presentation PDF](https://img.shields.io/badge/Presentation-PDF_보러가기-blue?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](./docs/Ready_Presentation.pdf) |
 
 <br/>
-
-### 🎥 시연 영상 (Demo Video)
-[![YouTube Badge](https://img.shields.io/badge/Youtube-보러가기-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/cKIgKIPlY4M)
