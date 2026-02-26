@@ -1,4 +1,3 @@
-<br/>
 
 ## 🚀 Ready
 
@@ -97,3 +96,8 @@ npm run dev
 ### 🔗 Deployment
 
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://ready-done-kappa.vercel.app/)
+
+<br/>
+
+### 🎥 시연 영상 (Demo Video)
+[![YouTube Badge](https://img.shields.io/badge/Youtube-보러가기-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/cKIgKIPlY4M)
