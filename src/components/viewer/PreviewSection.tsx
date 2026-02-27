@@ -78,21 +78,26 @@ export default function PreviewSection({
 
   return (
     <section className="flex-1 lg:w-[60%] flex flex-col min-h-125 lg:h-full lg:overflow-hidden bg-slate-50/50 dark:bg-slate-950 transition-colors">
-      <div className="p-6 lg:p-8 lg:pb-4 flex justify-between items-center bg-transparent">
-        <div className="hidden sm:block">
+      <div className="p-6 lg:p-8 lg:pb-4 flex justify-between items-start bg-transparent">
+        {/* 왼쪽 영역 */}
+        <div className="flex flex-col">
           <h3 className="text-lg font-bold tracking-tight dark:text-slate-100">
             Done<span className="text-blue-600">.</span>
           </h3>
           {content && !isLoading && (
             <button
               onClick={handleFinishEditing}
-              className="text-xs font-bold mt-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
+              className="text-xs font-bold mt-1 text-blue-600 dark:text-blue-400 transition-colors cursor-pointer w-fit"
             >
               {isEditing ? "수정 완료" : "내용 수정하기"}
             </button>
           )}
         </div>
-        <ActionButtons content={content} isLoading={isLoading} />
+
+        {/* 오른쪽 영역 (ActionButtons) */}
+        <div className="shrink-0">
+          <ActionButtons content={content} isLoading={isLoading} />
+        </div>
       </div>
 
       <div className="flex-1 p-5 lg:p-8 lg:pt-0 lg:overflow-hidden">
